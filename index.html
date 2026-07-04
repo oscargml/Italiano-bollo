@@ -46,15 +46,6 @@
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8643026289824701" crossorigin="anonymous"></script>
 
-<!-- Google Analytics: replace G-XXXXXXXXXX with your real Measurement ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
-
 <!-- JSON-LD: WebApplication -->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Bollo B2",
@@ -615,7 +606,7 @@ function loadProgress(){
   }catch(e){}
   return { xp:0, completed:{}, lastActive:null, streak:0, activeDates:[] };
 }
-function saveProgress(p){ localStorage.setItem(STORE_KEY, JSON.stringify(p)); }
+function saveProgress(p){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(p)); }catch(e){} }
 let progress = loadProgress();
 
 function todayStr(){ return new Date().toISOString().slice(0,10); }
@@ -1047,6 +1038,312 @@ const grammarTopics = [
     {q:'"Non prenderò quella strada, ___ non ci sia altro modo per arrivare in tempo."', options:['a meno che','purché','affinché','benché'], correct:0, explain:'"A meno che (non)" introduce un\'eccezione condizionale.'},
     {q:'"___ il progetto sia complesso, il team lo completerà in tempo." (benché)', options:['Benché','Purché','Affinché','Siccome'], correct:0, explain:'"Benché" ha valore concessivo, come "sebbene".'}
   ]
+},
+{
+  id:'imperativo', tag:'Modo imperativo', title:'Imperativo con i pronomi',
+  desc:'"Dimmelo!", "Non preoccuparti", "Si accomodi": ordini, consigli e cortesia.',
+  explain:`L'<b>imperativo informale</b> (tu, noi, voi) attacca i pronomi alla fine del verbo: dammi, dimmelo, alzati. Con i verbi monosillabici (da', di', fa', va', sta') la consonante del pronome raddoppia: <b>dammi, dimmi, fallo, vacci</b> (eccezione: gli → dagli). L'<b>imperativo negativo</b> con "tu" usa non + infinito: "Non farlo!" / "Non lo fare!". L'<b>imperativo formale</b> (Lei) usa il congiuntivo presente e mette i pronomi <b>prima</b>: "Mi dica", "Si accomodi", "Non si preoccupi".`,
+  table:{
+    head:['Persona','Affermativo','Negativo','Con pronome'],
+    rows:[
+      ['tu','Parla!','Non parlare!','Parlami! / Non parlarmi!'],
+      ['Lei (formale)','Parli!','Non parli!','Mi parli! / Non mi parli!'],
+      ['noi','Parliamo!','Non parliamo!','Parliamone!'],
+      ['voi','Parlate!','Non parlate!','Parlatemi!'],
+    ]
+  },
+  examples:[
+    '<em>Dimmi</em> la verità, per favore.',
+    '<em>Non ti preoccupare</em>, andrà tutto bene.',
+    'Prego, <em>si accomodi</em> e <em>mi dica</em> tutto.',
+    'Il pane? <em>Compralo</em> tu, io non ho tempo.'
+  ],
+  quiz:[
+    {q:'"___ la verità!" (dire, tu + pronome mi)', options:['Dimmi','Dicimi','Mi di\'','Dimme'], correct:0, explain:'Di\' + mi → raddoppiamento: dimmi.'},
+    {q:'Formale: "Prego, ___ pure." (accomodarsi, Lei)', options:['accomodati','si accomodi','vi accomodate','accomodasi'], correct:1, explain:'Imperativo formale = congiuntivo presente, pronome prima: si accomodi.'},
+    {q:'Negativo con "tu": "___ tardi stasera!"', options:['Non torna','Non tornare','Non torni','Non tornerai'], correct:1, explain:'Imperativo negativo di "tu" = non + infinito: non tornare.'},
+    {q:'"Il libro? ___ subito a Marco!" (dare, tu: glielo)', options:['Daglielo','Dagli lo','Glielo da\'','Dallo gli'], correct:0, explain:'Da\' + glielo → daglielo (con "gli" non c\'è raddoppiamento).'},
+    {q:'Formale negativo: "___ , signora, è tutto sotto controllo."', options:['Non preoccuparti','Non si preoccupi','Non vi preoccupate','Non preoccupati'], correct:1, explain:'Con "Lei": non si preoccupi (pronome prima del verbo).'},
+    {q:'"___ a casa subito!" (andare, tu + ci)', options:['Vacci','Vaici','Ci va\'','Andaci'], correct:0, explain:'Va\' + ci → raddoppiamento: vacci.'}
+  ]
+},
+{
+  id:'futuro', tag:'Tempi verbali', title:'Futuro semplice e futuro anteriore',
+  desc:'Previsioni, promesse, ipotesi ("Sarà già arrivato?") e azioni future in sequenza.',
+  explain:`Il <b>futuro semplice</b> esprime azioni future, previsioni e promesse, ma anche <b>ipotesi sul presente</b> ("Che ore saranno? Saranno le tre" = probabilmente sono le tre). Il <b>futuro anteriore</b> (avrò/sarò + participio) indica un'azione futura che avverrà <b>prima</b> di un'altra azione futura ("Quando avrò finito, ti chiamerò") o un'<b>ipotesi sul passato</b> ("Sarà già partito" = probabilmente è già partito).`,
+  table:{
+    head:['Uso','Tempo','Esempio'],
+    rows:[
+      ['Azione futura','Futuro semplice','Domani partirò per Roma.'],
+      ['Ipotesi sul presente','Futuro semplice','Dove sarà Marco? Sarà in ufficio.'],
+      ['Azione anteriore a un\'altra futura','Futuro anteriore','Appena avrò finito, uscirò.'],
+      ['Ipotesi sul passato','Futuro anteriore','Non risponde: sarà uscito.'],
+    ]
+  },
+  examples:[
+    'L\'anno prossimo <em>ci trasferiremo</em> in un\'altra città.',
+    'Quando <em>avrai letto</em> il libro, me lo <em>presterai</em>?',
+    'Non trovo le chiavi... le <em>avrò lasciate</em> in macchina.',
+    '<em>Saranno</em> le otto, più o meno.'
+  ],
+  quiz:[
+    {q:'"Appena ___ (finire) di studiare, ti chiamerò."', options:['finirò','avrò finito','finisco','ho finito'], correct:1, explain:'Azione anteriore a un\'altra futura → futuro anteriore: avrò finito.'},
+    {q:'"Marco non risponde al telefono. ___ (essere) in riunione." (ipotesi sul presente)', options:['Sarà','Sarà stato','È','Era'], correct:0, explain:'Ipotesi sul presente → futuro semplice: sarà.'},
+    {q:'"La luce è spenta: ___ già ___ (uscire)." (ipotesi sul passato)', options:['sarà / uscito','è / uscito','sarebbe / uscito','fu / uscito'], correct:0, explain:'Ipotesi su un\'azione passata → futuro anteriore: sarà uscito.'},
+    {q:'"Fra dieci anni, secondo me, la gente ___ (lavorare) sempre meno in ufficio."', options:['lavorerà','avrà lavorato','lavora','lavorerebbe'], correct:0, explain:'Previsione futura → futuro semplice: lavorerà.'},
+    {q:'"Quanti anni ___ (avere) quel signore? Sui sessanta, direi."', options:['ha','avrà','avrebbe','aveva'], correct:1, explain:'Stima/ipotesi sull\'età presente → futuro semplice: avrà.'},
+    {q:'"Ti restituirò il libro solo quando lo ___ (leggere) tutto."', options:['leggerò','avrò letto','leggo','abbia letto'], correct:1, explain:'"Quando" + azione completata prima → futuro anteriore: avrò letto.'}
+  ]
+},
+{
+  id:'trapassato', tag:'Tempi verbali', title:'Trapassato prossimo',
+  desc:'"Quando sono arrivato, era già partita": il passato prima del passato.',
+  explain:`Il <b>trapassato prossimo</b> (imperfetto di avere/essere + participio: avevo mangiato, ero partito) esprime un'azione passata avvenuta <b>prima</b> di un'altra azione passata. È essenziale al B2 per raccontare storie con più piani temporali e per il discorso indiretto ("Ha detto che aveva già mangiato").`,
+  table:{
+    head:['Prima azione (trapassato)','Seconda azione (passato)'],
+    rows:[
+      ['Avevo già cenato','quando mi hai chiamato.'],
+      ['Era partita da un\'ora','quando sono arrivato io.'],
+      ['Non avevamo capito le istruzioni','perciò abbiamo sbagliato.'],
+      ['Si erano conosciuti a Roma','e si sono sposati due anni dopo.'],
+    ]
+  },
+  examples:[
+    'Quando siamo arrivati al cinema, il film <em>era già cominciato</em>.',
+    'Non ti ho chiamato perché <em>avevo perso</em> il telefono.',
+    'Mi ha raccontato che da giovane <em>aveva vissuto</em> in Argentina.',
+    'La casa che <em>avevano comprato</em> nel 2010 ora vale il doppio.'
+  ],
+  quiz:[
+    {q:'"Quando sono arrivato alla festa, Maria ___ già ___ (andarsene)."', options:['se n\'era / andata','se n\'è / andata','se ne andava','se ne sarà andata'], correct:0, explain:'Azione precedente al mio arrivo → trapassato: se n\'era andata.'},
+    {q:'"Non ho comprato il pane perché lo ___ già ___ (comprare) mia madre."', options:['ha / comprato','aveva / comprato','avrà / comprato','avesse / comprato'], correct:1, explain:'La madre lo aveva comprato PRIMA → trapassato prossimo.'},
+    {q:'"Ci ha detto che ___ (visitare) Firenze molti anni prima."', options:['ha visitato','aveva visitato','visitava','avrebbe visitato'], correct:1, explain:'Discorso indiretto + azione anteriore → trapassato: aveva visitato.'},
+    {q:'"Il treno ___ già ___ (partire) quando siamo arrivati in stazione."', options:['è / partito','era / partito','fu / partito','sarà / partito'], correct:1, explain:'Il treno è partito prima del nostro arrivo → era partito.'},
+    {q:'"Ero stanchissimo perché ___ (dormire) solo tre ore la notte prima."', options:['ho dormito','avevo dormito','dormivo','avrei dormito'], correct:1, explain:'La causa (dormire poco) precede lo stato (essere stanco) → avevo dormito.'}
+  ]
+},
+{
+  id:'relativi', tag:'Sintassi', title:'Pronomi relativi: che, cui, il quale',
+  desc:'"La persona di cui ti parlavo", "il motivo per cui sono qui": collegare frasi con eleganza.',
+  explain:`<b>CHE</b> è invariabile e funziona da soggetto o oggetto diretto ("Il libro che leggo"). <b>CUI</b> si usa sempre <b>dopo una preposizione</b>: di cui, a cui, con cui, per cui, in cui ("La città in cui vivo"). <b>IL/LA QUALE, I/LE QUALI</b> è più formale e concorda in genere e numero; utile per evitare ambiguità. <b>Il cui / la cui</b> esprime possesso: "Lo scrittore il cui romanzo ha vinto il premio".`,
+  table:{
+    head:['Pronome','Funzione','Esempio'],
+    rows:[
+      ['che','soggetto / oggetto diretto','La ragazza che parla è mia sorella.'],
+      ['preposizione + cui','complemento indiretto','L\'amico con cui viaggio.'],
+      ['il/la quale','formale, evita ambiguità','La collega della quale ti ho parlato.'],
+      ['il cui / la cui','possesso','L\'autore il cui libro è famoso.'],
+    ]
+  },
+  examples:[
+    'Questo è il progetto <em>a cui</em> lavoro da mesi.',
+    'Il motivo <em>per cui</em> ti chiamo è urgente.',
+    'La ditta <em>presso la quale</em> lavoravo ha chiuso.',
+    'È un artista <em>le cui</em> opere sono esposte in tutto il mondo.'
+  ],
+  quiz:[
+    {q:'"La casa ___ abito è in centro."', options:['che','in cui','cui','la quale'], correct:1, explain:'Complemento di luogo → preposizione + cui: in cui.'},
+    {q:'"L\'amico ___ ti ho parlato arriva domani."', options:['che','a cui','di cui','il quale'], correct:2, explain:'Parlare DI qualcuno → di cui.'},
+    {q:'"Non capisco il motivo ___ si è offeso."', options:['che','per cui','di cui','a cui'], correct:1, explain:'Motivo/causa → per cui.'},
+    {q:'"È una scrittrice ___ romanzi sono tradotti in venti lingue." (possesso)', options:['che i','i cui','di cui i','dei quali'], correct:1, explain:'Possesso → i cui romanzi (l\'articolo concorda con la cosa posseduta).'},
+    {q:'"Le persone ___ ho invitato non sono ancora arrivate."', options:['che','cui','a cui','le quali'], correct:0, explain:'Oggetto diretto (ho invitato le persone) → che.'},
+    {q:'"Il collega ___ scrivania è accanto alla mia va in pensione."', options:['la cui','che la','di cui la','il cui'], correct:0, explain:'Possesso, concordato con "scrivania" (femminile): la cui scrivania.'}
+  ]
+},
+{
+  id:'verbi-pronominali', tag:'Lessico e sintassi', title:'Verbi pronominali: farcela, andarsene, volerci',
+  desc:'"Non ce la faccio più", "me ne vado", "ci vogliono due ore": i verbi che gli italiani usano ogni giorno.',
+  explain:`I <b>verbi pronominali</b> incorporano particelle (ci, ne, la) che ne cambiano il significato. I più importanti al B2: <b>farcela</b> (riuscire: "Ce l'ho fatta!"), <b>andarsene</b> (andare via: "Me ne vado"), <b>volerci</b> (essere necessario, impersonale: "Ci vuole un'ora / Ci vogliono due ore"), <b>metterci</b> (impiegare tempo, personale: "Ci metto un'ora"), <b>cavarsela</b> (riuscire in modo accettabile: "Me la cavo"), <b>prendersela</b> (offendersi: "Non te la prendere!").`,
+  table:{
+    head:['Verbo','Significato','Esempio'],
+    rows:[
+      ['farcela','riuscire','Non ce la faccio a finire in tempo.'],
+      ['andarsene','andare via','Se ne sono andati presto.'],
+      ['volerci','essere necessario','Ci vogliono tre ore di viaggio.'],
+      ['metterci','impiegare (tempo)','Quanto ci metti da casa al lavoro?'],
+      ['cavarsela','riuscire più o meno','Con l\'inglese me la cavo.'],
+      ['prendersela','offendersi','Non te la prendere, scherzavo!'],
+    ]
+  },
+  examples:[
+    'Era tardi, così <em>me ne sono andato</em> senza salutare.',
+    '<em>Ci vuole</em> pazienza con i bambini.',
+    'Quanto tempo <em>ci hai messo</em> a scrivere la tesi?',
+    'Pensavo di non <em>farcela</em>, ma alla fine <em>ce l\'ho fatta</em>!'
+  ],
+  quiz:[
+    {q:'"Per andare da Roma a Milano in treno ___ circa tre ore." (volerci)', options:['ci vuole','ci vogliono','ci mettono','ci metto'], correct:1, explain:'"Tre ore" è plurale → ci vogliono.'},
+    {q:'"Quanto ___ tu per arrivare in ufficio?" (metterci)', options:['ci vuoi','ci vuole','ci metti','ce la fai'], correct:2, explain:'Tempo impiegato da una persona specifica → metterci: ci metti.'},
+    {q:'"La festa era noiosa, così ___ dopo un\'ora." (andarsene, noi, passato)', options:['ce ne siamo andati','ci siamo andati','se ne sono andati','ce la siamo andata'], correct:0, explain:'Andarsene al passato prossimo, 1ª plurale: ce ne siamo andati.'},
+    {q:'"Era un esame difficilissimo, ma alla fine ___!" (farcela, io, passato)', options:['ce l\'ho fatta','ce la faccio','me la sono cavata bene','l\'ho fatta'], correct:0, explain:'Farcela al passato: ce l\'ho fatta (la ≠ concorda: fatta).'},
+    {q:'"Dai, non ___: era solo uno scherzo!" (prendersela, tu, imperativo negativo)', options:['te la prendere','prendertela','te ne andare','prendere'], correct:0, explain:'Non + te la prendere (o "non prendertela"): qui la forma corretta tra le opzioni è "te la prendere".'},
+    {q:'"Parli bene lo spagnolo? — Insomma, ___." (cavarsela)', options:['me ne vado','me la cavo','ce la faccio','ci metto'], correct:1, explain:'Riuscire in modo accettabile → cavarsela: me la cavo.'}
+  ]
+},
+{
+  id:'concordanza-participio', tag:'Morfologia', title:'Concordanza del participio passato',
+  desc:'"Le ho viste", "ci siamo alzati", "la pizza che ho mangiato": quando il participio concorda e quando no.',
+  explain:`Con l'ausiliare <b>essere</b>, il participio concorda sempre con il soggetto: "Maria è partita", "Ci siamo alzati presto". Con <b>avere</b>, il participio normalmente NON concorda ("Ho mangiato la pizza"), <b>tranne</b> quando prima del verbo c'è un pronome diretto <b>lo, la, li, le</b> (o ne): "La pizza? L'ho mangiat<b>a</b>", "I biglietti? Li ho comprat<b>i</b>", "Quante mele hai preso? Ne ho pres<b>e</b> tre". Con mi, ti, ci, vi come oggetto diretto la concordanza è facoltativa.`,
+  table:{
+    head:['Caso','Regola','Esempio'],
+    rows:[
+      ['Ausiliare essere','Concorda col soggetto','Le ragazze sono arrivate.'],
+      ['Avere, senza pronome','Invariabile (-o)','Ho comprato le scarpe.'],
+      ['Avere + lo/la/li/le','Concorda col pronome','Le scarpe? Le ho comprate.'],
+      ['Avere + ne','Concorda con la quantità','Di mele ne ho mangiate due.'],
+    ]
+  },
+  examples:[
+    'Hai visto le chiavi? — Sì, <em>le ho viste</em> sul tavolo.',
+    'Mia sorella <em>si è laureata</em> ieri.',
+    'Quante email hai scritto? — <em>Ne ho scritte</em> dieci.',
+    'La torta <em>l\'ha fatta</em> mia nonna.'
+  ],
+  quiz:[
+    {q:'"Hai comprato le birre? — Sì, ___ ieri."', options:['le ho comprate','le ho comprato','l\'ho comprate','ho comprate'], correct:0, explain:'Pronome diretto "le" prima di avere → participio concorda: comprate.'},
+    {q:'"Maria e Lucia ___ tardi ieri sera." (arrivare)', options:['sono arrivate','sono arrivati','hanno arrivato','è arrivata'], correct:0, explain:'Ausiliare essere + soggetto femminile plurale: sono arrivate.'},
+    {q:'"Quanti libri hai letto quest\'anno? — ___ almeno venti."', options:['Ne ho letti','Ne ho letto','Li ho letto','Ho letti'], correct:0, explain:'Ne + quantità maschile plurale → concordanza: ne ho letti.'},
+    {q:'"La email importante? Non ___ ancora." (leggere)', options:['l\'ho letta','l\'ho letto','la ho leggiuta','ho letta'], correct:0, explain:'La (email, femm.) + avere → l\'ho letta.'},
+    {q:'"I ragazzi ___ alle sette per prendere il treno." (alzarsi)', options:['si sono alzati','si hanno alzato','si sono alzato','sono alzati'], correct:0, explain:'Verbo riflessivo → ausiliare essere + concordanza: si sono alzati.'}
+  ]
+},
+{
+  id:'indefiniti', tag:'Morfologia', title:'Aggettivi e pronomi indefiniti',
+  desc:'Qualche, alcuni, ognuno, chiunque, nessuno, qualsiasi: le parole della quantità indefinita.',
+  explain:`<b>Qualche</b> è sempre singolare anche con significato plurale ("qualche amico" = alcuni amici). <b>Alcuni/e</b> è plurale ("alcuni amici"). <b>Ognuno/ciascuno</b> = ogni persona, solo singolare. <b>Chiunque</b> = qualsiasi persona (spesso + congiuntivo: "Chiunque venga, digli di aspettare"). <b>Nessuno</b> richiede la doppia negazione se dopo il verbo ("Non è venuto nessuno") ma non prima ("Nessuno è venuto"). <b>Qualsiasi/qualunque</b> = non importa quale ("a qualsiasi ora").`,
+  table:{
+    head:['Indefinito','Uso','Esempio'],
+    rows:[
+      ['qualche','+ singolare','Ho qualche dubbio.'],
+      ['alcuni/e','+ plurale','Alcune persone non sono d\'accordo.'],
+      ['ognuno','pronome, solo sing.','Ognuno ha le proprie idee.'],
+      ['chiunque','+ congiuntivo','Chiunque sia stato, deve scusarsi.'],
+      ['nessuno','doppia neg. dopo il verbo','Non ho visto nessuno.'],
+    ]
+  },
+  examples:[
+    'C\'è <em>qualche</em> problema con la connessione.',
+    '<em>Ognuno</em> di noi deve fare la sua parte.',
+    '<em>Chiunque</em> abbia esperienza può candidarsi.',
+    'Puoi chiamarmi a <em>qualsiasi</em> ora.'
+  ],
+  quiz:[
+    {q:'"Ho ancora ___ dubbio su questo argomento."', options:['qualche','alcuni','qualsiasi','ognuno'], correct:0, explain:'"Qualche" + sostantivo singolare: qualche dubbio.'},
+    {q:'"___ studenti hanno già consegnato il compito."', options:['Qualche','Alcuni','Ognuno','Chiunque'], correct:1, explain:'Con il plurale "studenti" → alcuni.'},
+    {q:'"Non è venuto ___ alla riunione di ieri."', options:['nessuno','qualcuno','ognuno','chiunque'], correct:0, explain:'Negazione dopo il verbo → non... nessuno.'},
+    {q:'"___ abbia informazioni è pregato di contattare la polizia." (+ congiuntivo)', options:['Ognuno','Qualche','Chiunque','Alcuni'], correct:2, explain:'"Chiunque" + congiuntivo (abbia).'},
+    {q:'"___ partecipante riceverà un attestato."', options:['Ogni','Ognuno','Alcuni','Qualche volta'], correct:0, explain:'"Ogni" è aggettivo + sostantivo singolare: ogni partecipante ("ognuno" è pronome, non può precedere un nome).'},
+    {q:'"Va bene ___ soluzione, purché funzioni."', options:['qualsiasi','ognuna','nessuna','chiunque'], correct:0, explain:'"Qualsiasi" = non importa quale: qualsiasi soluzione.'}
+  ]
+},
+{
+  id:'preposizioni-articolate', tag:'Morfologia', title:'Preposizioni articolate e usi difficili',
+  desc:'Nel, sulla, dagli... e le scelte difficili: IN o A? DA o DI? PER o TRA?',
+  explain:`Le preposizioni <b>di, a, da, in, su</b> si fondono con l'articolo (di + il = del, in + la = nella, su + gli = sugli). Al B2 contano soprattutto gli <b>usi difficili</b>: <b>a</b> + città ("a Roma") ma <b>in</b> + paese/regione ("in Italia, in Toscana"); <b>da</b> per provenienza ("vengo da Milano"), agente ("scritto da Dante") e "a casa di" ("vado dal medico"); <b>tra/fra</b> per il tempo futuro ("tra due giorni"); <b>da + infinito</b> per necessità ("qualcosa da mangiare").`,
+  table:{
+    head:['','il','lo','la','i','gli','le'],
+    rows:[
+      ['di','del','dello','della','dei','degli','delle'],
+      ['a','al','allo','alla','ai','agli','alle'],
+      ['da','dal','dallo','dalla','dai','dagli','dalle'],
+      ['in','nel','nello','nella','nei','negli','nelle'],
+      ['su','sul','sullo','sulla','sui','sugli','sulle'],
+    ]
+  },
+  examples:[
+    'Vivo <em>a</em> Città del Guatemala, ma sono nato <em>in</em> Messico.',
+    'Domani vado <em>dal</em> dentista.',
+    'Il treno parte <em>tra</em> venti minuti.',
+    'C\'è ancora molto <em>da</em> fare prima dell\'esame.'
+  ],
+  quiz:[
+    {q:'"Abito ___ Milano, ma lavoro spesso ___ Svizzera."', options:['a / in','in / a','a / a','in / in'], correct:0, explain:'A + città (a Milano), IN + paese (in Svizzera).'},
+    {q:'"Stasera andiamo a cena ___ Marco." (a casa di Marco)', options:['a','da','in','con'], correct:1, explain:'DA + persona = a casa di / presso: da Marco.'},
+    {q:'"Il pacco arriverà ___ tre giorni."', options:['in','per','tra','da'], correct:2, explain:'Tempo futuro ("dopo un intervallo di") → tra/fra tre giorni.'},
+    {q:'"I libri sono ___ scaffale in alto." (su + lo)', options:['sul','sullo','nello','allo'], correct:1, explain:'Su + lo scaffale → sullo scaffale.'},
+    {q:'"C\'è qualcosa ___ bere in frigo?"', options:['di','a','da','per'], correct:2, explain:'Da + infinito con valore di necessità/disponibilità: qualcosa da bere.'},
+    {q:'"La Divina Commedia è stata scritta ___ Dante."', options:['di','da','per','a'], correct:1, explain:'Complemento d\'agente nella forma passiva → da Dante.'}
+  ]
+},
+{
+  id:'imperfetto-pp', tag:'Tempi verbali', title:'Imperfetto vs. passato prossimo',
+  desc:'"Andavo al mare ogni estate" vs. "Sono andato al mare una volta": la differenza che cambia tutto il racconto.',
+  explain:`L'<b>imperfetto</b> descrive azioni passate <b>abituali</b> (che si facevano sempre), <b>ripetitive</b> o <b>durative</b> (che duravano nel tempo), oltre a descrizioni e stati d'animo. Il <b>passato prossimo</b> racconta azioni <b>puntuali</b>, concluse, avvenute una volta. Quando due azioni passate si incontrano nella stessa frase: due azioni durative parallele → imperfetto + imperfetto ("Mentre studiavo, mia sorella cucinava"); due azioni puntuali in sequenza → passato prossimo + passato prossimo ("Quando è arrivato, l'abbiamo salutato"); un'azione lunga interrotta da una breve → imperfetto + passato prossimo ("Mentre mangiavo, è suonato il telefono").`,
+  table:{
+    head:['Imperfetto','Passato prossimo'],
+    rows:[
+      ['Abituale: Da bambino andavo al mare ogni domenica','Una volta sola: Da bambino una volta sono andato al mare'],
+      ['Ripetitiva: Mia zia faceva sempre dolci','Puntuale: Ieri mia zia ha fatto un dolce'],
+      ['Durativa: Ieri pioveva (tutto il giorno)','Momentanea: Ieri è piovuto un po\''],
+      ['Descrizione/stato: Ero stanco, il cielo era grigio','Evento: Mi sono svegliato tardi'],
+    ]
+  },
+  examples:[
+    'Mentre <em>studiavo</em>, mia sorella <em>preparava</em> la cena. (due azioni parallele)',
+    'Quando Fulvio <em>è arrivato</em>, lo <em>abbiamo salutato</em>. (due azioni puntuali)',
+    'Mentre <em>facevo</em> la doccia, <em>è suonato</em> il telefono. (lunga + breve)',
+    'Da giovane mio nonno <em>leggeva</em> senza occhiali; ieri <em>ha letto</em> tutta la sera.'
+  ],
+  quiz:[
+    {q:'"L\'anno scorso ___ in piscina tutti i giorni." (azione abituale)', options:['sono andato','andavo'], correct:1, explain:'"Tutti i giorni" indica un\'abitudine → imperfetto: andavo.'},
+    {q:'"Giovedì ___ in piscina con Bruno." (una volta specifica)', options:['sono andato','andavo'], correct:0, explain:'Azione puntuale, avvenuta una volta → passato prossimo: sono andato.'},
+    {q:'"Mentre ___ , Paola è arrivata."', options:['ho telefonato','telefonavo'], correct:1, explain:'Azione lunga interrotta da una breve → imperfetto: telefonavo.'},
+    {q:'"Da piccolo ___ paura dei tuoni." (stato che durava)', options:['ho avuto','avevo'], correct:1, explain:'Stato/condizione durativa nel passato → imperfetto: avevo.'},
+    {q:'"Ieri sera ___ un film bellissimo al cinema." (evento concluso)', options:['ho visto','vedevo'], correct:0, explain:'Azione puntuale e conclusa → passato prossimo: ho visto.'},
+    {q:'"Quando ___ in Cile, andavo a scuola da febbraio a novembre."', options:['ho abitato','abitavo'], correct:1, explain:'Situazione di sfondo abituale → imperfetto: abitavo.'}
+  ]
+},
+{
+  id:'concordanza-indicativo', tag:'Tempi verbali', title:'Concordanza dei tempi dell\'indicativo',
+  desc:'Prima, durante o dopo? Come ordinare i tempi quando la frase principale è al passato.',
+  explain:`Quando la frase principale è al <b>passato</b>, la subordinata segue una logica temporale precisa: se l'azione è avvenuta <b>prima</b> → trapassato prossimo ("Sapevo che l'avevo già visto"); se è <b>contemporanea</b> → imperfetto ("Ha detto che era stanco"); se è <b>posteriore</b> (futuro nel passato) → condizionale passato ("Credeva che sarebbe arrivato presto"). Attenzione: in italiano il "futuro nel passato" si esprime con il condizionale <b>passato</b>, mai con il condizionale presente — una differenza importante rispetto allo spagnolo e all'inglese.`,
+  table:{
+    head:['Rapporto temporale','Tempo nella subordinata','Esempio'],
+    rows:[
+      ['Anteriorità (prima)','Trapassato prossimo','Sapevo che aveva già mangiato.'],
+      ['Contemporaneità (durante)','Imperfetto','Ha detto che era stanco.'],
+      ['Posteriorità (dopo)','Condizionale passato','Ha promesso che sarebbe venuto.'],
+    ]
+  },
+  examples:[
+    'Nessuno credeva che Iacopo <em>avrebbe avuto</em> successo. (posteriore)',
+    'Quando me lo presentarono, sapevo che lo <em>avevo</em> già <em>visto</em>. (anteriore)',
+    'Mi ha detto che <em>lavorava</em> in banca. (contemporaneo)',
+    'Ero convinta che alla fine non <em>sarebbero venuti</em>. (posteriore)'
+  ],
+  quiz:[
+    {q:'"All\'inizio della carriera, nessuno credeva che lui ___ successo." (dopo)', options:['ha avuto','avrebbe avuto','aveva avuto','avrà avuto'], correct:1, explain:'Azione posteriore rispetto a "credeva" → condizionale passato: avrebbe avuto.'},
+    {q:'"Quando l\'ho incontrato, sapevo che lo ___ da qualche parte." (prima)', options:['avevo visto','ho visto','vedevo','avrei visto'], correct:0, explain:'Azione anteriore → trapassato prossimo: avevo visto.'},
+    {q:'"Ci hanno detto che ci ___ la macchina, ma poi hanno trovato una scusa." (dopo)', options:['prestavano','avrebbero prestato','hanno prestato','presteranno'], correct:1, explain:'Promessa da mantenere in futuro (nel passato) → avrebbero prestato.'},
+    {q:'"Ha spiegato che in quel periodo ___ troppo e dormiva poco." (durante)', options:['lavorava','ha lavorato','avrebbe lavorato','aveva lavorato'], correct:0, explain:'Contemporaneità nel passato → imperfetto: lavorava.'},
+    {q:'"Ero sicura che loro ___ già ___ quando siamo arrivati." (prima)', options:['erano / partiti','sono / partiti','sarebbero / partiti','saranno / partiti'], correct:0, explain:'Anteriorità rispetto al passato → trapassato: erano partiti.'}
+  ]
+},
+{
+  id:'passivo-andare', tag:'Sintassi', title:'Il passivo con ANDARE (va fatto, va detto)',
+  desc:'"Il modulo va compilato entro venerdì": il passivo che esprime un obbligo.',
+  explain:`Oltre a essere e venire, l'italiano forma il passivo con <b>andare + participio passato</b>, che aggiunge un'idea di <b>necessità o obbligo</b>: "Il modulo <b>va compilato</b>" = deve essere compilato. È molto frequente in avvisi, istruzioni e testi burocratici — proprio i testi che compaiono nella prova di lettura del B2. Si usa solo nei tempi semplici (presente, imperfetto, futuro), non nei tempi composti. Il participio concorda con il soggetto: "Le tasse <b>vanno pagate</b> entro il 30".`,
+  table:{
+    head:['Forma','Significato','Esempio'],
+    rows:[
+      ['va + participio','deve essere...','La domanda va presentata online.'],
+      ['vanno + participio','devono essere...','I documenti vanno firmati in originale.'],
+      ['andava + participio','doveva essere...','Il rapporto andava consegnato ieri.'],
+    ]
+  },
+  examples:[
+    'Questo vino <em>va servito</em> freddo.',
+    'Le medicine <em>vanno prese</em> dopo i pasti.',
+    'Il contratto <em>andava letto</em> con più attenzione.',
+    '<em>Va detto</em> che il progetto ha avuto anche dei problemi.'
+  ],
+  quiz:[
+    {q:'"La domanda ___ entro il 30 settembre." (dovere essere presentata)', options:['va presentata','è presentata','viene presentando','va presentare'], correct:0, explain:'Obbligo → andare + participio concordato: va presentata.'},
+    {q:'"I moduli ___ in tutte le loro parti." (dovere essere compilati)', options:['va compilato','vanno compilati','vanno compilare','sono compilando'], correct:1, explain:'Soggetto plurale → vanno compilati.'},
+    {q:'"Il pesce fresco ___ in giornata." (dovere essere consumato)', options:['va consumato','va consumare','viene consumare','andava consumati'], correct:0, explain:'Va + participio concordato al singolare: va consumato.'},
+    {q:'"La relazione ___ ieri, ma nessuno l\'ha fatto." (doveva essere consegnata)', options:['va consegnata','andava consegnata','è andata consegnata','andrebbe consegnare'], correct:1, explain:'Obbligo nel passato → imperfetto: andava consegnata.'},
+    {q:'"___ che non tutti sono d\'accordo con questa decisione." (bisogna dire)', options:['Va detto','Va dire','Viene detto va','Andava dicendo'], correct:0, explain:'Espressione fissa: va detto che... = bisogna dire che...'}
+  ]
 }
 ];
 
@@ -1179,6 +1476,22 @@ const readingPassages = [
     {q:'Cosa deve contenere la lettera motivazionale?', options:['Un riassunto del curriculum','Le ragioni della richiesta, in massimo 300 parole','Una traduzione del documento d\'identità','I voti scolastici'], correct:1, explain:'"Una lettera motivazionale di massimo 300 parole in cui si spieghino le ragioni della richiesta".'},
     {q:'È possibile fare ricorso contro la graduatoria definitiva?', options:['Sì, entro 30 giorni','Sì, ma solo per email','No, non è prevista questa possibilità','Solo in casi eccezionali'], correct:2, explain:'"Non è prevista la possibilità di presentare ricorso avverso la graduatoria definitiva".'}
   ]
+},
+{
+  id:'let-6', tag:'Racconto personale · Vero/Falso', title:'Il paese fuori stagione',
+  text:[
+    `Ogni anno, verso la fine di ottobre, torno per qualche giorno nel paese sulla costa dove passavo le vacanze da bambino. Fuori stagione è un posto completamente diverso: i turisti sono spariti, metà dei ristoranti ha già chiuso e sulla passeggiata si incontrano solo i residenti, che finalmente si riprendono le strade.`,
+    `Mi piace proprio per questo. D'estate il paese vive di fretta: camerieri che corrono tra i tavoli, file al porto, musica fino a tardi. In autunno, invece, il ritmo rallenta. Il proprietario dell'unico bar aperto ha tempo per chiacchierare, e i pescatori riparano le reti sul molo senza che nessuno li fotografi.`,
+    `Quest'anno ho notato anche qualcosa di nuovo: il vecchio cinema, chiuso da almeno dieci anni, è stato ristrutturato da un gruppo di giovani del posto, che lo hanno trasformato in uno spazio per concerti e corsi serali. Non tutti in paese erano d'accordo — qualcuno avrebbe preferito l'ennesimo albergo — ma la sala, mi dicono, è quasi sempre piena. Forse i paesi come questo non sopravvivono grazie ai turisti di agosto, ma grazie a chi resta quando le luci si spengono.`
+  ],
+  questions:[
+    {q:'L\'autore visita il paese durante l\'alta stagione turistica.', options:['Vero','Falso'], correct:1, explain:'Falso: ci torna "verso la fine di ottobre", fuori stagione.'},
+    {q:'In autunno molti ristoranti del paese sono chiusi.', options:['Vero','Falso'], correct:0, explain:'Vero: "metà dei ristoranti ha già chiuso".'},
+    {q:'All\'autore il paese fuori stagione non piace.', options:['Vero','Falso'], correct:1, explain:'Falso: dice esplicitamente "Mi piace proprio per questo".'},
+    {q:'Il vecchio cinema è stato trasformato in un albergo.', options:['Vero','Falso'], correct:1, explain:'Falso: è diventato uno spazio per concerti e corsi; era qualcun altro a preferire un albergo.'},
+    {q:'Tutti gli abitanti erano d\'accordo con il progetto del cinema.', options:['Vero','Falso'], correct:1, explain:'Falso: "Non tutti in paese erano d\'accordo".'},
+    {q:'Secondo l\'autore, la sopravvivenza del paese dipende soprattutto da chi ci vive tutto l\'anno.', options:['Vero','Falso'], correct:0, explain:'Vero: "grazie a chi resta quando le luci si spengono".'}
+  ]
 }
 ];
 
@@ -1223,6 +1536,51 @@ const usoExercises = [
     {text:'', gap:{answer:['di'], hint:'(decidere ___ fare)'}, cont:' ricominciare da capo, e questa volta voglio contare '},
     {text:'', gap:{answer:['su'], hint:'(contare ___ qualcuno)'}, cont:' l\'aiuto di un collega. Credo fermamente '},
     {text:'', gap:{answer:['in','nel'], hint:'(credere ___ qualcosa)'}, cont:' questo progetto.'}
+  ]
+},
+{
+  id:'uso-5', tag:'Cloze grammaticale', title:'Congiuntivo in contesto',
+  intro:'Completa con la forma corretta del congiuntivo (presente, passato, imperfetto o trapassato).',
+  parts:[
+    {text:'Penso che Laura ', gap:{answer:['sia'], hint:'(essere, cong. presente)'}, cont:' la persona giusta per questo ruolo, anche se il direttore dubita che lei '},
+    {text:'', gap:{answer:['abbia'], hint:'(avere, cong. presente)'}, cont:' abbastanza esperienza. Ieri sembrava che tutti '},
+    {text:'', gap:{answer:['fossero'], hint:'(essere, cong. imperfetto)'}, cont:' d\'accordo con me, ma oggi non ne sono più sicuro. Speravo che voi mi '},
+    {text:'', gap:{answer:['aveste avvisato','avessero avvisato'], hint:'(avvisare, cong. trapassato)'}, cont:' prima della riunione: è importante che in futuro tutti '},
+    {text:'', gap:{answer:['comunichino'], hint:'(comunicare, cong. presente)'}, cont:' meglio.'}
+  ]
+},
+{
+  id:'uso-6', tag:'Trasformazione', title:'Sostituisci con i pronomi',
+  intro:'Riscrivi ogni frase sostituendo le parti sottolineate con i pronomi corretti (combinati, ci, ne).',
+  transform:[
+    {active:'Ho dato IL LIBRO A MARIA ieri. → ___ ho dato ieri.', answer:['glielo','gliel\''], hint:'a lei + lo'},
+    {active:'Parliamo spesso DEL PROGETTO. → ___ parliamo spesso.', answer:['ne'], hint:'di + qualcosa'},
+    {active:'Vado IN PALESTRA tre volte a settimana. → ___ vado tre volte a settimana.', answer:['ci'], hint:'luogo'},
+    {active:'Puoi prestare LA MACCHINA A ME? → Puoi prestar___?', answer:['mela'], hint:'a me + la (attaccato all\'infinito)'},
+    {active:'Ho comprato TRE MELE. → ___ ho comprate tre.', answer:['ne'], hint:'quantità'}
+  ]
+},
+{
+  id:'uso-7', tag:'Cloze grammaticale', title:'Imperfetto o passato prossimo?',
+  intro:'Completa il racconto con l\'imperfetto o il passato prossimo del verbo indicato.',
+  parts:[
+    {text:'Quando ', gap:{answer:['ero'], hint:'(essere, io)'}, cont:' piccolo, ogni estate la mia famiglia affittava una casa in un paesino di mare. Un anno, però, '},
+    {text:'', gap:{answer:['è successo'], hint:'(succedere)'}, cont:' qualcosa di diverso: mentre '},
+    {text:'', gap:{answer:['giocavo'], hint:'(giocare, io)'}, cont:' sulla spiaggia con mio cugino, '},
+    {text:'', gap:{answer:['abbiamo trovato'], hint:'(trovare, noi)'}, cont:' una bottiglia con dentro un biglietto. Il messaggio '},
+    {text:'', gap:{answer:['era'], hint:'(essere)'}, cont:' scritto in francese e nessuno di noi lo capiva, così lo '},
+    {text:'', gap:{answer:['abbiamo portato'], hint:'(portare, noi)'}, cont:' alla signora del bar, che conosceva la lingua.'}
+  ]
+},
+{
+  id:'uso-8', tag:'Cloze grammaticale', title:'CI o NE?',
+  intro:'Completa ogni frase con la particella corretta: ci oppure ne.',
+  parts:[
+    {text:'— Quanti esami ti mancano? — ', gap:{answer:['ne'], hint:'(quantità)'}, cont:' ho ancora tre. — E all\'università quando torni? — '},
+    {text:'', gap:{answer:['ci'], hint:'(luogo)'}, cont:' torno lunedì. Del nuovo professore che cosa '},
+    {text:'', gap:{answer:['ne'], hint:'(di + qualcosa)'}, cont:' pensi? Io non lo conosco, ma tutti '},
+    {text:'', gap:{answer:['ne'], hint:'(di lui)'}, cont:' parlano bene. Al futuro dopo la laurea preferisco non pensar'},
+    {text:'', gap:{answer:['ci'], hint:'(pensare a)'}, cont:' per ora!'}
   ]
 }
 ];
@@ -1387,15 +1745,15 @@ function openGrammarLesson(id){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-/* generic MCQ quiz renderer */
+/* generic MCQ quiz renderer — instant per-question feedback */
 function renderQuiz(host, questions, moduleId){
-  let answers = new Array(questions.length).fill(null);
+  let answered = 0, correctCount = 0;
   host.innerHTML = `
     <h4>Verifica</h4>
-    <div class="quiz-progress" id="qp-${moduleId}">0 / ${questions.length} risposte</div>
+    <div class="quiz-progress" id="qp-${moduleId}">Rispondi a ogni domanda: la correzione appare subito.</div>
     <div id="qlist-${moduleId}"></div>
-    <button class="small-btn" id="submitBtn-${moduleId}" disabled>Correggi</button>
     <div class="quiz-result" id="result-${moduleId}"></div>
+    <button class="small-btn" id="retryBtn-${moduleId}" style="display:none;">Riprova il quiz</button>
   `;
   const qlist = host.querySelector(`#qlist-${moduleId}`);
   qlist.innerHTML = questions.map((q,qi)=>`
@@ -1408,34 +1766,7 @@ function renderQuiz(host, questions, moduleId){
     </div>
   `).join('');
 
-  qlist.querySelectorAll('.q-card').forEach(card=>{
-    const qi = +card.dataset.qi;
-    card.querySelectorAll('.opt').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        if(answers[qi]!==null) return; // already answered
-        answers[qi] = +btn.dataset.oi;
-        card.querySelectorAll('.opt').forEach(b=>b.disabled=true);
-        host.querySelector(`#qp-${moduleId}`).textContent = answers.filter(a=>a!==null).length + ' / ' + questions.length + ' risposte';
-        const allAnswered = answers.every(a=>a!==null);
-        host.querySelector(`#submitBtn-${moduleId}`).disabled = !allAnswered;
-      });
-    });
-  });
-
-  host.querySelector(`#submitBtn-${moduleId}`).addEventListener('click', ()=>{
-    let correctCount = 0;
-    questions.forEach((q,qi)=>{
-      const card = qlist.querySelector(`.q-card[data-qi="${qi}"]`);
-      const opts = card.querySelectorAll('.opt');
-      opts.forEach((btn,oi)=>{
-        if(oi===q.correct) btn.classList.add('correct');
-        else if(oi===answers[qi]) btn.classList.add('incorrect');
-      });
-      if(answers[qi]===q.correct) correctCount++;
-      const ex = card.querySelector('.opt-explain');
-      ex.textContent = q.explain;
-      ex.classList.add('show');
-    });
+  function finish(){
     const pct = Math.round((correctCount/questions.length)*100);
     const pass = pct >= 60;
     const resultEl = host.querySelector(`#result-${moduleId}`);
@@ -1453,7 +1784,35 @@ function renderQuiz(host, questions, moduleId){
     markComplete(moduleId, pct);
     if(pass) addXP(20); else addXP(5);
     touchStreak();
+    const retryBtn = host.querySelector(`#retryBtn-${moduleId}`);
+    retryBtn.style.display = 'inline-block';
+    retryBtn.onclick = ()=> renderQuiz(host, questions, moduleId);
     resultEl.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  qlist.querySelectorAll('.q-card').forEach(card=>{
+    const qi = +card.dataset.qi;
+    const q = questions[qi];
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(card.dataset.done) return;
+        card.dataset.done = '1';
+        const chosen = +btn.dataset.oi;
+        // instant correction on this question
+        card.querySelectorAll('.opt').forEach((b,oi)=>{
+          b.disabled = true;
+          if(oi===q.correct) b.classList.add('correct');
+          else if(oi===chosen) b.classList.add('incorrect');
+        });
+        if(chosen===q.correct) correctCount++;
+        const ex = card.querySelector('.opt-explain');
+        ex.textContent = q.explain;
+        ex.classList.add('show');
+        answered++;
+        host.querySelector(`#qp-${moduleId}`).textContent = answered + ' / ' + questions.length + ' risposte · ' + correctCount + ' corrette';
+        if(answered === questions.length) finish();
+      });
+    });
   });
 }
 
