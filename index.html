@@ -598,14 +598,60 @@ footer.site p{ font-size:0.8rem; color: rgba(244,239,227,0.5); margin:0; line-he
    BOLLO B2 — app logic
    ===================================================================== */
 
+/* ---------- utility helpers ---------- */
+function shuffle(array) {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleQuestionOptions(q) {
+  const isVeroFalso = q.options.length === 2 &&
+    ((q.options[0] === 'Vero' && q.options[1] === 'Falso') || (q.options[0] === 'Falso' && q.options[1] === 'Vero'));
+  if (isVeroFalso) {
+    return { ...q, options: [...q.options] };
+  }
+
+  const optionsWithIndex = q.options.map((opt, idx) => ({ opt, isCorrect: idx === q.correct }));
+  const shuffled = shuffle(optionsWithIndex);
+  const newOptions = shuffled.map(item => item.opt);
+  const newCorrect = shuffled.findIndex(item => item.isCorrect);
+
+  return {
+    ...q,
+    options: newOptions,
+    correct: newCorrect
+  };
+}
+
 /* ---------- progress store ---------- */
 const STORE_KEY = 'bolloB2Progress';
 function loadProgress(){
   try{
     const raw = localStorage.getItem(STORE_KEY);
-    if(raw) return JSON.parse(raw);
+    if(raw) {
+      const parsed = JSON.parse(raw);
+      if (!parsed.writingAnswers) parsed.writingAnswers = {};
+      if (!parsed.checkedRubrics) parsed.checkedRubrics = {};
+      if (!parsed.checkedCriteria) parsed.checkedCriteria = {};
+      if (!parsed.speakingTranscripts) parsed.speakingTranscripts = {};
+      return parsed;
+    }
   }catch(e){}
-  return { xp:0, completed:{}, lastActive:null, streak:0, activeDates:[] };
+  return {
+    xp:0,
+    completed:{},
+    lastActive:null,
+    streak:0,
+    activeDates:[],
+    writingAnswers:{},
+    checkedRubrics:{},
+    checkedCriteria:{},
+    speakingTranscripts:{}
+  };
 }
 function saveProgress(p){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(p)); }catch(e){} }
 let progress = loadProgress();
@@ -1748,6 +1794,7 @@ function openGrammarLesson(id){
 
 /* generic MCQ quiz renderer — instant per-question feedback */
 function renderQuiz(host, questions, moduleId){
+  questions = shuffle(questions).map(q => shuffleQuestionOptions(q));
   let answered = 0, correctCount = 0;
   host.innerHTML = `
     <h4>Verifica</h4>
@@ -1907,12 +1954,14 @@ function openUso(id){
   host.style.display='block';
 
   let bodyHTML = '';
+  let transformToRender = [];
   if(t.parts){
     bodyHTML = `<div class="cloze-text" id="clozeText">` + t.parts.map((p,i)=>
       `${p.text}<input type="text" data-i="${i}" placeholder="${p.gap.hint}" autocomplete="off">${p.cont}`
     ).join('') + `</div>`;
   } else if(t.transform){
-    bodyHTML = t.transform.map((tr,i)=>`
+    transformToRender = shuffle(t.transform);
+    bodyHTML = transformToRender.map((tr,i)=>`
       <div class="q-card">
         <div class="qtext">${i+1}. ${tr.active}</div>
         <input type="text" data-i="${i}" style="width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:3px;font-family:inherit;font-size:0.9rem;" placeholder="Scrivi la forma passiva… (${tr.hint})">
@@ -1944,15 +1993,15 @@ function openUso(id){
         if(ok) correct++;
       });
     } else if(t.transform){
-      total = t.transform.length;
+      total = transformToRender.length;
       document.querySelectorAll('#usoLessonHost .q-card').forEach((card,i)=>{
         const inp = card.querySelector('input');
-        const ok = t.transform[i].answer.some(a=>normalize(a)===normalize(inp.value));
+        const ok = transformToRender[i].answer.some(a=>normalize(a)===normalize(inp.value));
         inp.style.borderColor = ok ? 'var(--sage)' : 'var(--wine)';
         const ex = card.querySelector('.opt-explain');
         ex.classList.add('show');
         ex.style.color = ok ? '#3d6252' : '#8c2f39';
-        ex.textContent = ok ? 'Corretto!' : 'Risposta corretta: ' + t.transform[i].answer[0];
+        ex.textContent = ok ? 'Corretto!' : 'Risposta corretta: ' + transformToRender[i].answer[0];
         if(ok) correct++;
       });
     }
@@ -1983,6 +2032,12 @@ function openWriting(id){
   const host = document.getElementById('scritturaLessonHost');
   document.querySelector('#scritturaGrid').closest('.wrap').style.display='none';
   host.style.display='block';
+
+  if (!progress.writingAnswers) progress.writingAnswers = {};
+  if (!progress.checkedRubrics) progress.checkedRubrics = {};
+  const savedAnswer = progress.writingAnswers[t.id] || '';
+  const savedRubric = progress.checkedRubrics[t.id] || [];
+
   host.innerHTML = `
     <div class="lesson-panel">
       ${backButton(null,'scritturaGrid','scritturaLessonHost')}
@@ -1992,19 +2047,31 @@ function openWriting(id){
         <div class="task">${t.task}</div>
         <div class="constraints">${t.constraints}</div>
       </div>
-      <textarea class="answer" id="writingArea" placeholder="Scrivi qui la tua risposta…"></textarea>
-      <div class="word-count"><span id="wordCount">0 parole</span><span>Consigliato: vedi sopra</span></div>
+      <textarea class="answer" id="writingArea" placeholder="Scrivi qui la tua risposta…">${savedAnswer}</textarea>
+      <div class="word-count"><span id="wordCount">${savedAnswer.trim().split(/\s+/).filter(Boolean).length} parole</span><span>Consigliato: vedi sopra</span></div>
       <div class="rubric" id="rubricList">
         <h4 style="font-family:var(--serif);margin-top:22px;">Autovalutazione</h4>
-        ${t.rubric.map((r,i)=>`<label><input type="checkbox" data-i="${i}"> ${r}</label>`).join('')}
+        ${t.rubric.map((r,i)=>`<label><input type="checkbox" data-i="${i}" ${savedRubric.includes(i) ? 'checked' : ''}> ${r}</label>`).join('')}
       </div>
       <button class="small-btn" id="finishWritingBtn">Ho finito — vedi il modello</button>
       <div class="model-answer" id="modelAnswer"><b style="color:var(--wine);">Esempio di risposta:</b><br><br>${t.model}</div>
     </div>`;
   const ta = document.getElementById('writingArea');
   ta.addEventListener('input', ()=>{
-    const words = ta.value.trim().split(/\\s+/).filter(Boolean).length;
+    const words = ta.value.trim().split(/\s+/).filter(Boolean).length;
     document.getElementById('wordCount').textContent = words + ' parole';
+    progress.writingAnswers[t.id] = ta.value;
+    saveProgress(progress);
+  });
+  document.getElementById('rubricList').addEventListener('change', (e)=>{
+    if (e.target.type === 'checkbox') {
+      const checkedIndices = [];
+      document.querySelectorAll('#rubricList input').forEach(inp => {
+        if (inp.checked) checkedIndices.push(+inp.dataset.i);
+      });
+      progress.checkedRubrics[t.id] = checkedIndices;
+      saveProgress(progress);
+    }
   });
   document.getElementById('finishWritingBtn').addEventListener('click', ()=>{
     const checked = document.querySelectorAll('#rubricList input:checked').length;
@@ -2029,6 +2096,12 @@ function openSpeaking(id){
   const host = document.getElementById('parlatoLessonHost');
   document.querySelector('#parlatoGrid').closest('.wrap').style.display='none';
   host.style.display='block';
+
+  if (!progress.checkedCriteria) progress.checkedCriteria = {};
+  if (!progress.speakingTranscripts) progress.speakingTranscripts = {};
+  const savedCriteria = progress.checkedCriteria[t.id] || [];
+  const savedTranscript = progress.speakingTranscripts[t.id] || '';
+
   host.innerHTML = `
     <div class="lesson-panel">
       ${backButton(null,'parlatoGrid','parlatoLessonHost')}
@@ -2048,15 +2121,26 @@ function openSpeaking(id){
         <div class="timer-row"><span>Tempo per parlare:</span><span class="timer-display" id="speakTimer">${t.speak}s</span></div>
         <button class="small-btn" id="startSpeakBtn">Inizia a parlare</button>
         <p class="speak-status" id="speakStatus">Premi il pulsante e parla ad alta voce in italiano.</p>
-        <div class="passage" id="liveTranscript" style="display:none; min-height:60px;"></div>
+        <div class="passage" id="liveTranscript" style="${savedTranscript ? 'display:block;' : 'display:none;'} min-height:60px;">${savedTranscript ? `<p>${savedTranscript}</p>` : ''}</div>
       </div>
 
       <div class="rubric" id="rubricList" style="margin-top:24px;">
         <h4 style="font-family:var(--serif);">Autovalutazione (dopo aver parlato)</h4>
-        ${t.criteria.map((r,i)=>`<label><input type="checkbox" data-i="${i}"> ${r}</label>`).join('')}
+        ${t.criteria.map((r,i)=>`<label><input type="checkbox" data-i="${i}" ${savedCriteria.includes(i) ? 'checked' : ''}> ${r}</label>`).join('')}
       </div>
       <button class="small-btn" id="finishSpeakingBtn">Ho completato l\'esercizio</button>
     </div>`;
+
+  document.getElementById('rubricList').addEventListener('change', (e)=>{
+    if (e.target.type === 'checkbox') {
+      const checkedIndices = [];
+      document.querySelectorAll('#rubricList input').forEach(inp => {
+        if (inp.checked) checkedIndices.push(+inp.dataset.i);
+      });
+      progress.checkedCriteria[t.id] = checkedIndices;
+      saveProgress(progress);
+    }
+  });
 
   let prepInterval, speakInterval;
   document.getElementById('startPrepBtn').addEventListener('click', (e)=>{
@@ -2091,7 +2175,7 @@ function openSpeaking(id){
       recognition.interimResults = true;
       const box = document.getElementById('liveTranscript');
       box.style.display = 'block';
-      let finalText = '';
+      let finalText = savedTranscript;
       recognition.onresult = (ev)=>{
         let interim = '';
         for(let i=ev.resultIndex; i<ev.results.length; i++){
@@ -2099,6 +2183,8 @@ function openSpeaking(id){
           else interim += ev.results[i][0].transcript;
         }
         box.innerHTML = '<p>' + finalText + '<span style="opacity:0.5">' + interim + '</span></p>';
+        progress.speakingTranscripts[t.id] = finalText;
+        saveProgress(progress);
       };
       recognition.onerror = ()=>{ statusEl.textContent = 'Riconoscimento vocale non disponibile — continua comunque a voce alta.'; };
       try{ recognition.start(); }catch(err){}
